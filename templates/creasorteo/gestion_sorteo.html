@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gestión de Sorteo | Sorteos Sierra Norte Puebla</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+
+{% include 'partials/headercresort.html' %}
+{% include 'creasorteo/sidebarcresort.html' %}
+
+<main class="main-content">
+    <div class="container">
+
+        <header class="page-header">
+            <h2>Gestión de Sorteo</h2>
+            <p class="subtitle">{{ sorteo.nombre }}</p>
+        </header>
+
+        <section class="table-card tabla-info-sorteo">
+            <div class="info-sorteo-grid">
+                <div class="info-box">
+                    <span class="info-label">Premio</span>
+                    <span class="info-value">${{ "%.2f"|format(sorteo.premio) }}</span>
+                </div>
+                <div class="info-box">
+                    <span class="info-label">Precio por número</span>
+                    <span class="info-value">${{ "%.2f"|format(sorteo.precio_numero) }}</span>
+                </div>
+                <div class="info-box">
+                    <span class="info-label">Total de números</span>
+                    <span class="info-value">{{ sorteo.total_numeros }}</span>
+                </div>
+                <div class="info-box">
+                    <span class="info-label">Fecha del sorteo</span>
+                    <span class="info-value">{{ sorteo.fecha_sorteo }}</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="table-card">
+            <div class="table-actions">
+                <a href="{{ url_for('admin.administrar_sorteos') }}" class="btn-secondary">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Volver a sorteos</span>
+                </a>
+            </div>
+
+            <form method="GET" action="{{ url_for('admin.gestion_sorteo', sorteo_id=sorteo.id) }}" class="filtros-boletos">
+                <div class="filtros-grid">
+                    <div class="form-group">
+                        <label for="status_boleto">Filtrar por estatus</label>
+                        <select id="status_boleto" name="status_boleto" class="input-tabla">
+                            <option value="" {% if not filtro_status %}selected{% endif %}>Todos</option>
+                            <option value="Disponible" {% if filtro_status == 'Disponible' %}selected{% endif %}>Disponible</option>
+                            <option value="En revisión" {% if filtro_status == 'En revisión' %}selected{% endif %}>En revisión</option>
+                            <option value="Confirmado" {% if filtro_status == 'Confirmado' %}selected{% endif %}>Confirmado</option>
+                            <option value="Requiere nuevo comprobante" {% if filtro_status == 'Requiere nuevo comprobante' %}selected{% endif %}>Requiere nuevo comprobante</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="telefono">Filtrar por teléfono</label>
+                        <input type="text" id="telefono" name="telefono" value="{{ filtro_telefono }}" class="input-tabla" placeholder="2221234567">
+                    </div>
+                </div>
+
+                <div class="filtros-acciones">
+                    <button type="submit" class="btn-primary">
+                        <i class="fas fa-search"></i>
+                        <span>Filtrar</span>
+                    </button>
+
+                    <a href="{{ url_for('admin.gestion_sorteo', sorteo_id=sorteo.id) }}" class="btn-secondary">
+                        <i class="fas fa-eraser"></i>
+                        <span>Limpiar</span>
+                    </a>
+                </div>
+            </form>
+
+            <div class="resumen-paginacion">
+                <span>Total encontrados: {{ total_boletos_filtrados }}</span>
+                <span>Página {{ pagina }} de {{ total_paginas }}</span>
+            </div>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Número</th>
+                            <th>Oportunidades</th>
+                            <th>Nombre</th>
+                            <th>Apellido</th>
+                            <th>Teléfono</th>
+                            <th>Estado</th>
+                            <th>Fecha envío comprobante</th>
+                            <th>Fecha apartado</th>
+                            <th>Link foto comprobante</th>
+                            <th>Link del sorteo</th>
+                            <th>Observaciones</th>
+                            <th>Status del boleto</th>
+                            <th>Guardar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for boleto in boletos %}
+                        <tr>
+                            <form method="POST" action="{{ url_for('admin.actualizar_boleto', sorteo_id=sorteo.id, numero=boleto.numero) }}">
+                                <input type="hidden" name="pagina" value="{{ pagina }}">
+                                <input type="hidden" name="filtro_status" value="{{ filtro_status }}">
+                                <input type="hidden" name="filtro_telefono" value="{{ filtro_telefono }}">
+
+                                <td>
+                                    <strong>{{ boleto.numero }}</strong>
+                                </td>
+                                <td>
+                                    <input type="number" name="oportunidades" min="1" value="{{ boleto.oportunidades }}" class="input-tabla">
+                                </td>
+                                <td>
+                                    <input type="text" name="nombre" value="{{ boleto.nombre }}" class="input-tabla">
+                                </td>
+                                <td>
+                                    <input type="text" name="apellido" value="{{ boleto.apellido }}" class="input-tabla">
+                                </td>
+                                <td>
+                                    <input type="text" name="telefono" value="{{ boleto.telefono }}" class="input-tabla" placeholder="2221234567">
+                                </td>
+                                <td>
+                                    <input type="text" name="estado_mexico" value="{{ boleto.estado_mexico }}" class="input-tabla">
+                                </td>
+                                <td>
+                                    <input type="datetime-local" name="fecha_envio_comprobante" value="{{ boleto.fecha_envio_comprobante }}" class="input-tabla">
+                                </td>
+                                <td>
+                                    <input type="datetime-local" name="fecha_apartado" value="{{ boleto.fecha_apartado }}" class="input-tabla">
+                                </td>
+                                <td>
+                                    <input type="text" name="foto_comprobante_link" value="{{ boleto.foto_comprobante_link }}" class="input-tabla" placeholder="comprobantes/archivo.jpg">
+                                    {% if boleto.foto_comprobante_link %}
+                                    <a href="{{ url_for('static', filename=boleto.foto_comprobante_link) }}" target="_blank" class="link-comprobante">Ver</a>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <input type="text" value="{{ url_for('ver_sorteo_publico', sorteo_id=sorteo.id, _external=True) }}" class="input-tabla" readonly>
+                                    <a href="{{ url_for('ver_sorteo_publico', sorteo_id=sorteo.id) }}" target="_blank" class="link-comprobante">Abrir</a>
+                                </td>
+                                <td>
+                                    <input type="text" name="observaciones" value="{{ boleto.observaciones }}" class="input-tabla" placeholder="Ej. Comprobante borroso, falta monto o nombre">
+                                </td>
+                                <td>
+                                    <select name="status_boleto" class="input-tabla select-tabla estado-select {{ boleto.status_css }}">
+                                        <option value="Disponible" {% if boleto.status_boleto == 'Disponible' %}selected{% endif %}>Disponible</option>
+                                        <option value="En revisión" {% if boleto.status_boleto == 'En revisión' %}selected{% endif %}>En revisión</option>
+                                        <option value="Confirmado" {% if boleto.status_boleto == 'Confirmado' %}selected{% endif %}>Confirmado</option>
+                                        <option value="Requiere nuevo comprobante" {% if boleto.status_boleto == 'Requiere nuevo comprobante' %}selected{% endif %}>Requiere nuevo comprobante</option>
+                                    </select>
+                                    <span class="estado-boleto {{ boleto.status_css }}">{{ boleto.status_boleto }}</span>
+                                </td>
+                                <td>
+                                    <button type="submit" class="btn-primary btn-tabla">Guardar</button>
+                                </td>
+                            </form>
+                        </tr>
+                        {% endfor %}
+
+                        {% if not boletos %}
+                        <tr>
+                            <td colspan="13">
+                                <div class="empty-state">
+                                    <h3>No se encontraron boletos</h3>
+                                    <p>No hay resultados con los filtros actuales.</p>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="paginacion">
+                {% if pagina > 1 %}
+                <a href="{{ url_for('admin.gestion_sorteo', sorteo_id=sorteo.id, pagina=pagina-1, status_boleto=filtro_status, telefono=filtro_telefono) }}" class="btn-secondary">
+                    <i class="fas fa-chevron-left"></i>
+                    <span>Anterior</span>
+                </a>
+                {% endif %}
+
+                <div class="paginacion-numeros">
+                    {% for p in range(1, total_paginas + 1) %}
+                        {% if p == pagina %}
+                        <span class="pagina-actual">{{ p }}</span>
+                        {% else %}
+                        <a href="{{ url_for('admin.gestion_sorteo', sorteo_id=sorteo.id, pagina=p, status_boleto=filtro_status, telefono=filtro_telefono) }}" class="pagina-link">{{ p }}</a>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+
+                {% if pagina < total_paginas %}
+                <a href="{{ url_for('admin.gestion_sorteo', sorteo_id=sorteo.id, pagina=pagina+1, status_boleto=filtro_status, telefono=filtro_telefono) }}" class="btn-secondary">
+                    <span>Siguiente</span>
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+                {% endif %}
+            </div>
+        </section>
+
+    </div>
+</main>
+
+</body>
+</html>

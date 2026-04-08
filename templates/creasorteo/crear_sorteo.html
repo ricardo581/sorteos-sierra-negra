@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crear Sorteo | Sorteos Sierra Norte Puebla</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+
+{% include 'partials/headercresort.html' %}
+{% include 'creasorteo/sidebarcresort.html' %}
+
+<main class="main-content">
+    <div class="container">
+
+        <header class="page-header">
+            <h2>Crear Sorteo</h2>
+            <p class="subtitle">Configura un nuevo sorteo desde el panel administrativo</p>
+        </header>
+
+        <section class="form-card">
+
+            {% if error %}
+            <div class="alert alert-error">{{ error }}</div>
+            {% endif %}
+
+            {% if exito %}
+            <div class="alert alert-success">{{ exito }}</div>
+            {% endif %}
+
+            <form method="POST" action="{{ url_for('admin.crear_sorteo') }}">
+
+                <div class="form-group">
+                    <label for="nombre">Nombre del sorteo</label>
+                    <input
+                        type="text"
+                        id="nombre"
+                        name="nombre"
+                        placeholder="Ej. Rifa de $5,000 pesos"
+                        value="{{ request.form.get('nombre', '') }}"
+                        required
+                    >
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="premio">Premio</label>
+                        <input
+                            type="number"
+                            step="0.01"
+                            id="premio"
+                            name="premio"
+                            placeholder="5000"
+                            value="{{ request.form.get('premio', '') }}"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="precio_numero">Precio por número</label>
+                        <input
+                            type="number"
+                            step="0.01"
+                            id="precio_numero"
+                            name="precio_numero"
+                            placeholder="5"
+                            value="{{ request.form.get('precio_numero', '') }}"
+                            required
+                        >
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="total_numeros">Total de números</label>
+                        <input
+                            type="number"
+                            id="total_numeros"
+                            name="total_numeros"
+                            placeholder="1200"
+                            value="{{ request.form.get('total_numeros', '') }}"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fecha_sorteo">Fecha del sorteo</label>
+                        <input
+                            type="date"
+                            id="fecha_sorteo"
+                            name="fecha_sorteo"
+                            value="{{ request.form.get('fecha_sorteo', '') }}"
+                            required
+                        >
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="descripcion">Descripción</label>
+                    <textarea
+                        id="descripcion"
+                        name="descripcion"
+                        placeholder="Describe el sorteo, reglas o condiciones importantes"
+                    >{{ request.form.get('descripcion', '') }}</textarea>
+                </div>
+
+                <div class="form-actions">
+                    <a href="{{ url_for('admin.panel') }}" class="btn-secondary">
+                        <i class="fas fa-arrow-left"></i>
+                        <span>Volver</span>
+                    </a>
+
+                    <button type="submit" class="btn-primary">
+                        <i class="fas fa-save"></i>
+                        <span>Guardar sorteo</span>
+                    </button>
+                </div>
+
+            </form>
+        </section>
+
+    </div>
+</main>
+
+</body>
+</html>

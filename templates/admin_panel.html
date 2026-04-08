@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Panel de Administración | Sorteos Sierra Norte Puebla</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+<!-- HEADER -->
+<header class="top-header">
+
+    <div class="logo-header">
+        <span class="logo-text">Sorteos Sierra Norte Puebla</span>
+    </div>
+
+    <div class="header-right">
+
+        <div class="user-menu">
+            <button class="user-menu-btn">
+                {{ admin_usuario[0]|upper if admin_usuario else 'A' }}
+            </button>
+
+            <nav class="user-menu-content">
+                <div class="user-info">
+                    <span>{{ admin_usuario }}</span>
+                </div>
+
+                <a href="{{ url_for('admin.panel') }}" class="user-menu-item">
+                    Panel
+                </a>
+
+                <a href="{{ url_for('admin.logout') }}" class="user-menu-item">
+                    Cerrar sesión
+                </a>
+            </nav>
+        </div>
+
+    </div>
+
+</header>
+
+<!-- CONTENIDO -->
+<main class="main-content">
+
+    <div class="container">
+
+        <header class="page-header">
+            <h2>Panel de Administración</h2>
+            <p class="subtitle">Gestiona tus sorteos desde un solo lugar</p>
+        </header>
+
+        <section class="grid-layout">
+
+            <div class="grid-column">
+                <div class="card-btn" onclick="window.location.href='{{ url_for('admin.crear_sorteo') }}'">
+                    <div class="card-header">
+                        <span class="card-pill card-pill-alt">Nuevo</span>
+                    </div>
+                    <h3>Crear sorteo</h3>
+                    <p>Configura un nuevo sorteo con premio, precio por número y fecha.</p>
+                </div>
+            </div>
+
+            <div class="grid-column">
+                <div class="card-btn" onclick="window.location.href='{{ url_for('admin.administrar_sorteos') }}'">
+                    <div class="card-header">
+                        <span class="card-pill">Gestión</span>
+                    </div>
+                    <h3>Administrar sorteos</h3>
+                    <p>Consulta y controla los sorteos registrados.</p>
+                </div>
+            </div>
+
+        </section>
+
+    </div>
+
+</main>
+
+</body>
+</html>

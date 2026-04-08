@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Consultar apartado</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+<style>
+:root {
+    --bg: #f4f8ff;
+    --bg-soft: #eef5ff;
+    --card: rgba(255,255,255,0.92);
+    --card-strong: #ffffff;
+    --text: #0f172a;
+    --muted: #64748b;
+    --line: #dbe7f5;
+    --line-strong: #c7d7ec;
+    --primary: #2563eb;
+    --primary-dark: #1d4ed8;
+    --primary-soft: #dbeafe;
+    --success-soft: #dcfce7;
+    --success: #15803d;
+    --warning-soft: #fef3c7;
+    --warning: #b45309;
+    --danger-soft: #fee2e2;
+    --danger: #dc2626;
+    --shadow-sm: 0 10px 24px rgba(15, 23, 42, 0.06);
+    --shadow-md: 0 20px 45px rgba(15, 23, 42, 0.10);
+    --shadow-lg: 0 28px 60px rgba(15, 23, 42, 0.16);
+    --radius-xl: 30px;
+    --radius-lg: 24px;
+    --radius-md: 18px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    color: var(--text);
+    background:
+        radial-gradient(circle at top left, rgba(37, 99, 235, 0.08), transparent 28%),
+        radial-gradient(circle at top right, rgba(56, 189, 248, 0.10), transparent 25%),
+        linear-gradient(180deg, #fbfdff 0%, #f5f9ff 50%, #edf4ff 100%);
+}
+
+button,
+input,
+select,
+a {
+    font: inherit;
+}
+
+.apartado-page {
+    min-height: 100vh;
+    padding: 28px 16px 50px;
+}
+
+.apartado-wrap {
+    max-width: 1080px;
+    margin: 0 auto;
+    display: grid;
+    gap: 22px;
+}
+
+.card-apartado {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-xl);
+    padding: 24px;
+    box-shadow: var(--shadow-md);
+    backdrop-filter: blur(10px);
+}
+
+.hero-apartado {
+    position: relative;
+    overflow: hidden;
+    background:
+        radial-gradient(circle at 15% 10%, rgba(255,255,255,0.96), transparent 28%),
+        radial-gradient(circle at 90% 20%, rgba(191,219,254,0.65), transparent 26%),
+        linear-gradient(135deg, #ffffff 0%, #f8fbff 45%, #edf5ff 100%);
+    padding: 34px 26px;
+}
+
+.hero-apartado::before {
+    content: "";
+    position: absolute;
+    inset: auto -10% -80px -10%;
+    height: 180px;
+    background: radial-gradient(circle, rgba(37,99,235,0.08), transparent 65%);
+    pointer-events: none;
+}
+
+.hero-grid {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 18px;
+    align-items: center;
+}
+
+.hero-logo {
+    width: 88px;
+    border-radius: 22px;
+    padding: 10px;
+    background: rgba(255,255,255,0.68);
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 16px;
+}
+
+.hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.92);
+    border: 1px solid var(--line);
+    color: var(--primary-dark);
+    font-weight: 700;
+    font-size: 0.92rem;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow-sm);
+}
+
+.hero-apartado h1 {
+    margin: 0 0 10px;
+    font-size: clamp(2rem, 4vw, 3.3rem);
+    line-height: 1.02;
+    font-weight: 900;
+    letter-spacing: -0.04em;
+    color: #081226;
+}
+
+.hero-apartado p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 1rem;
+    line-height: 1.7;
+}
+
+.hero-side {
+    display: grid;
+    gap: 12px;
+}
+
+.hero-mini-card {
+    background: rgba(255,255,255,0.82);
+    border: 1px solid var(--line);
+    border-radius: 22px;
+    padding: 18px;
+    box-shadow: var(--shadow-sm);
+}
+
+.hero-mini-card .label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 0.82rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 800;
+}
+
+.hero-mini-card .value {
+    display: block;
+    font-size: 1.02rem;
+    font-weight: 800;
+    color: var(--text);
+}
+
+.titulo-seccion {
+    margin: 0 0 16px;
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--text);
+    letter-spacing: -0.02em;
+}
+
+.texto-seccion {
+    margin: -4px 0 16px;
+    color: var(--muted);
+    line-height: 1.6;
+}
+
+.form-busqueda,
+.subida-comprobante {
+    display: grid;
+    gap: 14px;
+}
+
+.form-busqueda-grid {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 14px;
+    align-items: end;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-group label {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #334155;
+}
+
+.input-tabla {
+    width: 100%;
+    min-height: 52px;
+    border-radius: 18px;
+    border: 1px solid #cbd5e1;
+    background: #ffffff;
+    padding: 14px 16px;
+    font-family: inherit;
+    font-size: 0.98rem;
+    color: #0f172a;
+    outline: none;
+    box-sizing: border-box;
+    transition: 0.2s ease;
+}
+
+.input-tabla:focus {
+    border-color: #60a5fa;
+    box-shadow: 0 0 0 4px rgba(96, 165, 250, 0.16);
+}
+
+.btn-primary,
+.btn-secondary {
+    min-height: 52px;
+    border: none;
+    border-radius: 18px;
+    padding: 14px 22px;
+    font-family: inherit;
+    font-size: 0.96rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: 0.22s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    text-decoration: none;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    color: #ffffff;
+    box-shadow: 0 14px 28px rgba(37, 99, 235, 0.22);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 18px 30px rgba(37, 99, 235, 0.26);
+}
+
+.btn-secondary {
+    background: #ffffff;
+    color: #334155;
+    border: 1px solid var(--line-strong);
+    box-shadow: 0 10px 18px rgba(148, 163, 184, 0.10);
+}
+
+.btn-secondary:hover {
+    background: #f8fbff;
+    transform: translateY(-1px);
+}
+
+.top-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.resumen-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.resumen-box {
+    background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+    border: 1px solid var(--line);
+    border-radius: 22px;
+    padding: 18px;
+}
+
+.resumen-box .label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 0.84rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 800;
+}
+
+.resumen-box .value {
+    display: block;
+    font-size: 1.2rem;
+    font-weight: 900;
+    color: var(--text);
+}
+
+.pago-transferencia-box {
+    background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+    border: 2px solid #111111;
+    border-radius: 24px;
+    padding: 28px 24px;
+    box-shadow: var(--shadow-sm);
+    margin-top: 18px;
+}
+
+.pago-transferencia-titulo {
+    text-align: center;
+    font-size: clamp(1.4rem, 3vw, 2.1rem);
+    font-weight: 900;
+    color: #2f9e44;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+.pago-transferencia-subtitulo {
+    text-align: center;
+    font-size: clamp(1rem, 2vw, 1.35rem);
+    font-weight: 900;
+    color: #ff0000;
+    margin-bottom: 24px;
+    text-transform: uppercase;
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 4px;
+}
+
+.pago-transferencia-grid {
+    display: grid;
+    gap: 14px;
+}
+
+.pago-transferencia-item {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: baseline;
+    padding-bottom: 8px;
+    border-bottom: 1px dashed #cbd5e1;
+}
+
+.pago-label {
+    min-width: 190px;
+    font-size: 1rem;
+    font-weight: 900;
+    color: #1e3a8a;
+    text-transform: uppercase;
+}
+
+.pago-value {
+    font-size: clamp(1.02rem, 2.2vw, 1.7rem);
+    font-weight: 900;
+    color: #111111;
+    word-break: break-word;
+}
+
+.pago-transferencia-nota {
+    margin-top: 22px;
+    padding: 16px 18px;
+    border-radius: 18px;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    color: #1d4ed8;
+    font-weight: 700;
+    line-height: 1.6;
+}
+
+.lista-boletos {
+    display: grid;
+    gap: 14px;
+}
+
+.boleto-card {
+    border: 1px solid var(--line);
+    border-radius: 22px;
+    padding: 18px;
+    background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+    box-shadow: var(--shadow-sm);
+}
+
+.boleto-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+}
+
+.boleto-numero {
+    font-size: 1.12rem;
+    font-weight: 900;
+    color: #0f172a;
+}
+
+.boleto-sorteo {
+    color: #475569;
+    font-weight: 600;
+    margin-top: 4px;
+}
+
+.estado-boleto {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 13px;
+    border-radius: 999px;
+    font-size: 0.82rem;
+    font-weight: 800;
+}
+
+.estado-boleto.disponible {
+    background: var(--success-soft);
+    color: var(--success);
+}
+
+.estado-boleto.en-revision {
+    background: var(--warning-soft);
+    color: var(--warning);
+}
+
+.estado-boleto.confirmado {
+    background: var(--primary-soft);
+    color: var(--primary-dark);
+}
+
+.estado-boleto.cancelado,
+.estado-boleto.rechazado {
+    background: var(--danger-soft);
+    color: var(--danger);
+}
+
+.boleto-detalle {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+}
+
+.detalle-box {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 14px;
+}
+
+.detalle-box span {
+    display: block;
+}
+
+.detalle-label {
+    font-size: 0.8rem;
+    font-weight: 800;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 6px;
+}
+
+.detalle-value {
+    font-size: 0.96rem;
+    font-weight: 700;
+    color: #0f172a;
+    word-break: break-word;
+}
+
+.texto-vacio {
+    color: #64748b;
+    font-weight: 500;
+}
+
+.comprobante-info {
+    padding: 16px 18px;
+    border-radius: 18px;
+    background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+    border: 1px solid var(--line);
+    color: #334155;
+    line-height: 1.7;
+}
+
+.comprobante-actual {
+    padding: 14px 16px;
+    border-radius: 16px;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    color: #1d4ed8;
+    font-weight: 700;
+}
+
+.nota-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px 18px;
+    border-radius: 20px;
+    background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+    border: 1px solid var(--line);
+    color: #334155;
+    line-height: 1.7;
+}
+
+.nota-top i {
+    color: #2563eb;
+    margin-top: 2px;
+    font-size: 1.05rem;
+}
+
+.alerta {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px 18px;
+    border-radius: 20px;
+    font-weight: 600;
+    line-height: 1.7;
+}
+
+.alerta i {
+    margin-top: 2px;
+    font-size: 1rem;
+}
+
+.alerta-exito {
+    background: linear-gradient(180deg, #f0fdf4 0%, #dcfce7 100%);
+    border: 1px solid #86efac;
+    color: #166534;
+}
+
+.alerta-error {
+    background: linear-gradient(180deg, #fef2f2 0%, #fee2e2 100%);
+    border: 1px solid #fca5a5;
+    color: #991b1b;
+}
+
+.alerta-observacion {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    background: #fff7ed;
+    border: 1px solid #fdba74;
+    color: #9a3412;
+    padding: 14px 16px;
+    border-radius: 16px;
+    margin-bottom: 12px;
+    font-weight: 600;
+}
+
+.alerta-observacion i {
+    font-size: 1.2rem;
+    margin-top: 2px;
+}
+
+.alerta-observacion p {
+    margin: 4px 0 6px;
+}
+
+.alerta-observacion span {
+    font-size: 0.92rem;
+    font-weight: 500;
+}
+
+@media (max-width: 900px) {
+    .hero-grid,
+    .resumen-grid,
+    .form-busqueda-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .apartado-page {
+        padding: 18px 12px 40px;
+    }
+
+    .card-apartado {
+        padding: 18px;
+        border-radius: 22px;
+    }
+
+    .top-actions {
+        display: grid;
+        grid-template-columns: 1fr;
+    }
+
+    .pago-transferencia-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+    }
+
+    .pago-label {
+        min-width: auto;
+    }
+}
+</style>
+</head>
+<body>
+<main class="apartado-page">
+    <section class="apartado-wrap">
+        <div class="card-apartado hero-apartado">
+            <div class="hero-grid">
+                <div>
+                    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo Sorteos Sierra Norte Puebla" class="hero-logo">
+
+                    <div class="hero-badge">
+                        <i class="fas fa-receipt"></i>
+                        Consulta tus boletos y sube tu comprobante
+                    </div>
+
+                    <h1>Consultar apartado</h1>
+                    <p>Ingresa tu número telefónico para revisar tus boletos apartados, conocer el total a pagar y subir tu comprobante de pago.</p>
+                </div>
+
+                <div class="hero-side">
+                    <div class="hero-mini-card">
+                        <span class="label">Consulta rápida</span>
+                        <span class="value">Busca tus boletos con tu número telefónico</span>
+                    </div>
+                    <div class="hero-mini-card">
+                        <span class="label">Comprobante</span>
+                        <span class="value">Súbelo aquí mismo al final de esta página</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="nota-top">
+            <i class="fas fa-circle-info"></i>
+            <div>
+                Aquí mismo se subirá el comprobante de pago. Primero escribe tu número telefónico para consultar tus boletos registrados. Después podrás ver cuántos boletos tienes, el total a pagar y subir tu comprobante.
+            </div>
+        </div>
+
+        {% if mensaje_exito %}
+        <div class="alerta alerta-exito">
+            <i class="fas fa-circle-check"></i>
+            <div>{{ mensaje_exito }}</div>
+        </div>
+        {% endif %}
+
+        {% if mensaje_error %}
+        <div class="alerta alerta-error">
+            <i class="fas fa-circle-exclamation"></i>
+            <div>{{ mensaje_error }}</div>
+        </div>
+        {% endif %}
+
+        <div class="card-apartado">
+            <div class="top-actions" style="margin-bottom: 18px;">
+                <a href="{{ url_for('inicio') }}" class="btn-secondary">
+                    <i class="fas fa-arrow-left"></i>
+                    Volver al sorteo
+                </a>
+            </div>
+
+            {% if not telefono_buscado %}
+            <h2 class="titulo-seccion">Buscar mis boletos</h2>
+            <p class="texto-seccion">Escribe el mismo número telefónico con el que apartaste tus boletos.</p>
+
+            <form method="POST" action="{{ url_for('consultar_apartado') }}" class="form-busqueda">
+                <div class="form-busqueda-grid">
+                    <div class="form-group">
+                        <label for="telefono">Número telefónico</label>
+                        <input type="text" name="telefono" id="telefono" class="input-tabla" required value="{{ telefono_buscado }}">
+                    </div>
+                    <button type="submit" class="btn-primary">
+                        <i class="fas fa-search"></i>
+                        Consultar
+                    </button>
+                </div>
+            </form>
+            {% else %}
+            <h2 class="titulo-seccion">Subir comprobante de pago</h2>
+            <p class="texto-seccion">Ya encontramos tus boletos. Desde aquí puedes subir tu comprobante de pago.</p>
+
+            <div class="comprobante-info">
+                En esta sección puedes subir tu comprobante de pago para revisión. Asegúrate de que la imagen o PDF se vea claramente y corresponda al pago de tus boletos.
+            </div>
+
+            {% set comprobantes_existentes = boletos_encontrados | selectattr('foto_comprobante_link') | list %}
+            {% if comprobantes_existentes and not mensaje_exito %}
+            <div class="comprobante-actual">
+                Ya existe un comprobante asociado a algunos de tus boletos.
+            </div>
+            {% endif %}
+
+            <form method="POST" action="{{ url_for('subir_comprobante') }}" enctype="multipart/form-data" class="subida-comprobante">
+                <input type="hidden" name="telefono" value="{{ telefono_buscado }}">
+
+                <div class="form-group">
+                    <label for="comprobante">Selecciona tu comprobante</label>
+                    <input type="file" name="comprobante" id="comprobante" class="input-tabla" accept=".jpg,.jpeg,.png,.pdf" required>
+                </div>
+
+                <button type="submit" class="btn-primary">
+                    <i class="fas fa-upload"></i>
+                    Subir comprobante
+                </button>
+            </form>
+            {% endif %}
+        </div>
+
+        {% if telefono_buscado %}
+        <div class="card-apartado">
+            <h2 class="titulo-seccion">Resumen de tu apartado</h2>
+
+            <div class="resumen-grid">
+                <div class="resumen-box">
+                    <span class="label">Teléfono consultado</span>
+                    <span class="value">{{ telefono_buscado }}</span>
+                </div>
+                <div class="resumen-box">
+                    <span class="label">Número de boletos</span>
+                    <span class="value">{{ total_boletos }}</span>
+                </div>
+                <div class="resumen-box">
+                    <span class="label">Total a pagar</span>
+                    <span class="value">${{ "%.2f"|format(total_pagar) }}</span>
+                </div>
+            </div>
+
+            <div class="pago-transferencia-box">
+                <div class="pago-transferencia-titulo">EXCLUSIVO TRANSFERENCIAS</div>
+                <div class="pago-transferencia-subtitulo">TU NOMBRE EN CONCEPTO DE PAGO</div>
+
+                <div class="pago-transferencia-grid">
+                    <div class="pago-transferencia-item">
+                        <span class="pago-label">Banco:</span>
+                        <span class="pago-value">BBVA</span>
+                    </div>
+
+                    <div class="pago-transferencia-item">
+                        <span class="pago-label">Titular:</span>
+                        <span class="pago-value">Ricardo Sanchez Baez</span>
+                    </div>
+
+                    <div class="pago-transferencia-item">
+                        <span class="pago-label">Número de tarjeta:</span>
+                        <span class="pago-value">4152313964305960</span>
+                    </div>
+
+                    <div class="pago-transferencia-item">
+                        <span class="pago-label">No. de cuenta:</span>
+                        <span class="pago-value">1522033828</span>
+                    </div>
+
+                    <div class="pago-transferencia-item">
+                        <span class="pago-label">Cuenta CLABE:</span>
+                        <span class="pago-value">012673015220338289</span>
+                    </div>
+                </div>
+
+                <div class="pago-transferencia-nota">
+                    En el concepto de la transferencia escribe el nombre de la persona que realizó el apartado para identificar el pago más fácilmente.
+                </div>
+            </div>
+        </div>
+
+        <div class="card-apartado">
+            <h2 class="titulo-seccion">Resultados de la consulta</h2>
+
+            {% if boletos_encontrados %}
+            <div class="lista-boletos">
+                {% for boleto in boletos_encontrados %}
+                <div class="boleto-card">
+                    <div class="boleto-top">
+                        <div>
+                            <div class="boleto-numero">Boleto {{ boleto.numero }}</div>
+                            <div class="boleto-sorteo">{{ boleto.nombre_sorteo }}</div>
+                        </div>
+
+                        <div>
+                            <span class="estado-boleto {{ boleto.status_css }}">
+                                {{ boleto.status_boleto }}
+                            </span>
+                        </div>
+                    </div>
+
+                    {% if boleto.status_boleto != 'Confirmado' and boleto.observaciones %}
+                    <div class="alerta-observacion">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <div>
+                            <strong>Observación importante:</strong>
+                            <p>{{ boleto.observaciones }}</p>
+                            <span>Por favor revisa esta observación y, si es necesario, sube un nuevo comprobante.</span>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <div class="boleto-detalle">
+                        <div class="detalle-box">
+                            <span class="detalle-label">Nombre</span>
+                            <span class="detalle-value">{{ boleto.nombre }} {{ boleto.apellido }}</span>
+                        </div>
+
+                        <div class="detalle-box">
+                            <span class="detalle-label">Teléfono</span>
+                            <span class="detalle-value">{{ boleto.telefono }}</span>
+                        </div>
+
+                        <div class="detalle-box">
+                            <span class="detalle-label">Estado</span>
+                            <span class="detalle-value">{{ boleto.estado_mexico }}</span>
+                        </div>
+
+                        <div class="detalle-box">
+                            <span class="detalle-label">Fecha apartado</span>
+                            <span class="detalle-value">{{ boleto.fecha_apartado if boleto.fecha_apartado else 'Sin fecha registrada' }}</span>
+                        </div>
+
+                        <div class="detalle-box">
+                            <span class="detalle-label">Fecha comprobante</span>
+                            <span class="detalle-value">{{ boleto.fecha_envio_comprobante if boleto.fecha_envio_comprobante else 'Sin comprobante enviado' }}</span>
+                        </div>
+
+                        <div class="detalle-box">
+                            <span class="detalle-label">Comprobante</span>
+                            <span class="detalle-value">
+                                {% if boleto.foto_comprobante_link %}
+                                Comprobante recibido
+                                {% else %}
+                                Sin comprobante
+                                {% endif %}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p class="texto-vacio">No se encontraron boletos asociados a ese número telefónico.</p>
+            {% endif %}
+        </div>
+        {% endif %}
+    </section>
+</main>
+</body>
+</html>

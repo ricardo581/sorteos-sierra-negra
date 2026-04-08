@@ -1,0 +1,1601 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sorteos Sierra Norte Puebla</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+<style>
+:root {
+    --bg: #f4f8ff;
+    --bg-soft: #eef4ff;
+    --card: rgba(255, 255, 255, 0.88);
+    --card-solid: #ffffff;
+    --text: #0f172a;
+    --muted: #64748b;
+    --line: #dbe7f5;
+    --line-strong: #c7d7ec;
+    --primary: #2563eb;
+    --primary-dark: #1d4ed8;
+    --primary-soft: #dbeafe;
+    --success-soft: #dcfce7;
+    --success: #16a34a;
+    --warning-soft: #fef3c7;
+    --warning: #d97706;
+    --danger-soft: #fee2e2;
+    --danger: #dc2626;
+    --shadow-sm: 0 8px 20px rgba(15, 23, 42, 0.06);
+    --shadow-md: 0 20px 45px rgba(15, 23, 42, 0.10);
+    --shadow-lg: 0 28px 60px rgba(15, 23, 42, 0.18);
+    --radius-xl: 30px;
+    --radius-lg: 22px;
+    --radius-md: 18px;
+    --radius-sm: 14px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    color: var(--text);
+    background:
+        radial-gradient(circle at top left, rgba(37, 99, 235, 0.08), transparent 28%),
+        radial-gradient(circle at top right, rgba(56, 189, 248, 0.10), transparent 25%),
+        linear-gradient(180deg, #fbfdff 0%, #f5f9ff 50%, #edf4ff 100%);
+}
+
+button,
+input,
+select,
+a {
+    font: inherit;
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+a:focus-visible {
+    outline: 3px solid rgba(37, 99, 235, 0.18);
+    outline-offset: 2px;
+}
+
+.public-page {
+    min-height: 100vh;
+    padding-bottom: 130px;
+}
+
+.hero-publico {
+    position: relative;
+    overflow: hidden;
+    padding: 42px 20px 34px;
+    border-bottom: 1px solid rgba(199, 215, 236, 0.7);
+    background:
+        radial-gradient(circle at 15% 10%, rgba(255,255,255,0.95), transparent 28%),
+        radial-gradient(circle at 90% 20%, rgba(191,219,254,0.65), transparent 26%),
+        linear-gradient(135deg, #ffffff 0%, #f8fbff 45%, #edf5ff 100%);
+}
+
+.hero-publico::before {
+    content: "";
+    position: absolute;
+    inset: auto -10% -70px -10%;
+    height: 180px;
+    background: radial-gradient(circle, rgba(37,99,235,0.08), transparent 65%);
+    pointer-events: none;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 1240px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 22px;
+    align-items: center;
+}
+
+.hero-copy {
+    text-align: left;
+}
+
+.logo-publico {
+    width: 90px;
+    max-width: 100%;
+    margin-bottom: 18px;
+    border-radius: 22px;
+    background: rgba(255,255,255,0.6);
+    padding: 10px;
+    box-shadow: var(--shadow-sm);
+}
+
+.hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.92);
+    border: 1px solid rgba(199, 215, 236, 0.95);
+    color: var(--primary-dark);
+    font-weight: 700;
+    font-size: 0.92rem;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow-sm);
+}
+
+.hero-content h1 {
+    margin: 0 0 14px;
+    font-size: clamp(2.1rem, 4vw, 4.2rem);
+    line-height: 1.02;
+    font-weight: 900;
+    letter-spacing: -0.04em;
+    color: #081226;
+}
+
+.hero-content p {
+    margin: 0 0 26px;
+    font-size: 1.08rem;
+    color: var(--muted);
+    max-width: 700px;
+    line-height: 1.7;
+    font-weight: 500;
+}
+
+.hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+}
+
+.hero-stats {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.hero-stat {
+    padding: 22px;
+    border-radius: 24px;
+    background: rgba(255,255,255,0.78);
+    border: 1px solid rgba(199, 215, 236, 0.95);
+    box-shadow: var(--shadow-sm);
+    backdrop-filter: blur(10px);
+}
+
+.hero-stat .label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 0.84rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 800;
+}
+
+.hero-stat .value {
+    display: block;
+    color: var(--text);
+    font-size: 1.18rem;
+    font-weight: 800;
+    word-break: break-word;
+}
+
+.contenedor-publico {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 26px 18px 70px;
+    display: grid;
+    gap: 22px;
+}
+
+.layout-principal {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
+    gap: 22px;
+    align-items: start;
+}
+
+.columna-principal,
+.columna-lateral {
+    display: grid;
+    gap: 22px;
+}
+
+.card-publica {
+    background: var(--card);
+    border: 1px solid rgba(219, 231, 245, 0.95);
+    border-radius: var(--radius-xl);
+    padding: 24px;
+    box-shadow: var(--shadow-md);
+    backdrop-filter: blur(10px);
+}
+
+.card-publica.compacta {
+    padding: 20px;
+}
+
+.card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 18px;
+}
+
+.card-header-left {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+}
+
+.card-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 18px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+    color: var(--primary-dark);
+    font-size: 1.15rem;
+    flex-shrink: 0;
+}
+
+.titulo-seccion {
+    margin: 0;
+    font-size: 1.45rem;
+    line-height: 1.1;
+    font-weight: 800;
+    color: var(--text);
+    letter-spacing: -0.03em;
+}
+
+.texto-seccion {
+    margin: 6px 0 0;
+    color: var(--muted);
+    font-size: 0.98rem;
+    line-height: 1.6;
+    font-weight: 500;
+}
+
+.info-publica-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 14px;
+}
+
+.info-publica-box {
+    background: linear-gradient(180deg, #ffffff 0%, #f7fbff 100%);
+    border: 1px solid var(--line);
+    border-radius: 22px;
+    padding: 18px;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.9);
+}
+
+.info-publica-label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 0.80rem;
+    font-weight: 800;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.info-publica-value {
+    display: block;
+    font-size: 1.08rem;
+    font-weight: 800;
+    color: var(--text);
+    word-break: break-word;
+}
+
+.descripcion-sorteo-box {
+    background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+    border: 1px solid var(--line);
+    border-radius: 24px;
+    padding: 22px;
+    line-height: 1.8;
+    color: #475569;
+    white-space: pre-line;
+    min-height: 150px;
+    font-size: 1rem;
+}
+
+.descripcion-sorteo-box strong {
+    color: var(--text);
+}
+
+.panel-acciones {
+    display: grid;
+    gap: 16px;
+}
+
+.panel-accion-principal {
+    border-radius: 26px;
+    padding: 22px;
+    background:
+        radial-gradient(circle at top right, rgba(191,219,254,0.35), transparent 30%),
+        linear-gradient(135deg, #ffffff 0%, #f6faff 100%);
+    border: 1px solid var(--line);
+}
+
+.panel-accion-principal h3 {
+    margin: 0 0 8px;
+    font-size: 1.18rem;
+    font-weight: 800;
+    color: var(--text);
+}
+
+.panel-accion-principal p {
+    margin: 0 0 18px;
+    color: var(--muted);
+    line-height: 1.65;
+    font-size: 0.97rem;
+}
+
+.acciones-maquina-principal,
+.acciones-publico {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+}
+
+.btn-primary,
+.btn-secondary,
+.btn-maquinita,
+.btn-generar-modal,
+.btn-confirmar-modal,
+.btn-link-publico {
+    border: none;
+    border-radius: 18px;
+    font-family: inherit;
+    font-weight: 800;
+    cursor: pointer;
+    transition: 0.25s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    text-decoration: none;
+}
+
+.btn-primary,
+.btn-maquinita,
+.btn-generar-modal,
+.btn-confirmar-modal {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: #ffffff;
+    padding: 15px 22px;
+    box-shadow: 0 16px 30px rgba(37, 99, 235, 0.24);
+}
+
+.btn-primary:hover,
+.btn-maquinita:hover,
+.btn-generar-modal:hover,
+.btn-confirmar-modal:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 22px 34px rgba(37, 99, 235, 0.28);
+}
+
+.btn-secondary,
+.btn-link-publico {
+    background: #ffffff;
+    color: #334155;
+    padding: 15px 20px;
+    border: 1px solid var(--line-strong);
+    box-shadow: 0 10px 18px rgba(148, 163, 184, 0.10);
+}
+
+.btn-secondary:hover,
+.btn-link-publico:hover {
+    background: #f8fbff;
+    transform: translateY(-1px);
+}
+
+.btn-primary:disabled,
+.btn-maquinita:disabled,
+.btn-generar-modal:disabled,
+.btn-confirmar-modal:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.resumen-sticky {
+    position: sticky;
+    top: 18px;
+}
+
+.resumen-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.estado-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 13px;
+    border-radius: 999px;
+    background: var(--primary-soft);
+    color: var(--primary-dark);
+    font-weight: 800;
+    font-size: 0.9rem;
+}
+
+.seleccionados-lista {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    min-height: 56px;
+    align-items: flex-start;
+    padding: 4px 0;
+}
+
+.boleto-tag {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 56px;
+    padding: 10px 16px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+    color: var(--primary-dark);
+    font-weight: 800;
+    border: 1px solid #bfdbfe;
+    box-shadow: 0 8px 16px rgba(59, 130, 246, 0.08);
+}
+
+.texto-vacio {
+    color: var(--muted);
+    font-weight: 500;
+}
+
+.resumen-seleccion {
+    margin: 16px 0 18px;
+    display: grid;
+    gap: 12px;
+}
+
+.resumen-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 16px 18px;
+    border-radius: 20px;
+    background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+    border: 1px solid var(--line);
+}
+
+.resumen-box span:first-child {
+    color: var(--muted);
+    font-weight: 700;
+}
+
+.resumen-box strong,
+.resumen-box span:last-child {
+    color: var(--text);
+    font-weight: 800;
+}
+
+.leyenda-boletos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 18px;
+}
+
+.leyenda-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 12px;
+    border-radius: 999px;
+    background: #ffffff;
+    border: 1px solid var(--line);
+    color: var(--muted);
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+.leyenda-punto {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.leyenda-punto.disponible {
+    background: linear-gradient(135deg, #bfdbfe 0%, #60a5fa 100%);
+}
+
+.leyenda-punto.seleccionado {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+}
+
+.leyenda-punto.no-disponible {
+    background: #cbd5e1;
+}
+
+.grid-boletos {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(78px, 1fr));
+    gap: 12px;
+}
+
+.boleto-item {
+    position: relative;
+    padding: 16px 8px;
+    border-radius: 20px;
+    border: 1px solid #d7e6f8;
+    background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+    color: var(--text);
+    font-weight: 800;
+    font-family: inherit;
+    cursor: pointer;
+    transition: 0.22s ease;
+    box-shadow: 0 10px 18px rgba(148, 163, 184, 0.08);
+    min-height: 60px;
+}
+
+.boleto-item:hover:not(:disabled) {
+    transform: translateY(-3px) scale(1.01);
+    border-color: #93c5fd;
+    background: linear-gradient(180deg, #ffffff 0%, #eff6ff 100%);
+    box-shadow: 0 18px 28px rgba(59, 130, 246, 0.14);
+}
+
+.boleto-item.seleccionado {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: #ffffff;
+    border-color: var(--primary);
+    box-shadow: 0 18px 34px rgba(37, 99, 235, 0.26);
+}
+
+.boleto-item:disabled {
+    cursor: not-allowed;
+    opacity: 0.72;
+    background: linear-gradient(180deg, #edf2f7 0%, #e2e8f0 100%);
+    color: #64748b;
+    border-color: #d3dce7;
+    box-shadow: none;
+}
+
+.form-grid-publico {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-group label {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #334155;
+}
+
+.input-tabla {
+    width: 100%;
+    border-radius: 18px;
+    border: 1px solid #cbd5e1;
+    background: #ffffff;
+    padding: 15px 15px;
+    font-family: inherit;
+    font-size: 0.97rem;
+    color: var(--text);
+    outline: none;
+    transition: 0.2s ease;
+}
+
+.input-tabla:focus {
+    border-color: #60a5fa;
+    box-shadow: 0 0 0 5px rgba(96, 165, 250, 0.16);
+}
+
+.boletos-confirmados-card {
+    margin: 8px 0 18px;
+    background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+    border-radius: 24px;
+    border: 1px solid var(--line);
+    padding: 18px;
+}
+
+.subtitulo-publico {
+    margin: 0 0 14px;
+    font-size: 1.04rem;
+    font-weight: 800;
+    color: var(--text);
+}
+
+.hidden {
+    display: none !important;
+}
+
+.modal-maquinita,
+.modal-apartado {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+}
+
+.modal-maquinita-overlay,
+.modal-apartado-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.52);
+    backdrop-filter: blur(8px);
+}
+
+.modal-maquinita-contenido,
+.modal-apartado-contenido {
+    position: relative;
+    z-index: 2;
+    width: min(92%, 780px);
+    max-height: 88vh;
+    overflow-y: auto;
+    margin: 4vh auto 0;
+    background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+    border-radius: 30px;
+    border: 1px solid #dbeafe;
+    box-shadow: var(--shadow-lg);
+    padding: 26px;
+}
+
+.modal-apartado-contenido {
+    width: min(92%, 900px);
+}
+
+.modal-cerrar {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 44px;
+    height: 44px;
+    border: none;
+    border-radius: 50%;
+    background: #ffffff;
+    color: var(--text);
+    font-size: 1rem;
+    font-weight: 900;
+    cursor: pointer;
+    border: 1px solid #cbd5e1;
+    box-shadow: 0 10px 20px rgba(148, 163, 184, 0.16);
+    transition: 0.2s ease;
+}
+
+.modal-cerrar:hover {
+    transform: scale(1.05);
+    background: #f8fbff;
+}
+
+.modal-header-cantidad {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+    padding-right: 52px;
+}
+
+.modal-header-cantidad label {
+    font-weight: 700;
+    color: #334155;
+}
+
+.modal-panel-boletos {
+    background: #ffffff;
+    border: 1px solid var(--line);
+    border-radius: 24px;
+    padding: 18px;
+}
+
+.modal-ayuda {
+    margin: 0 0 14px;
+    color: var(--muted);
+    line-height: 1.6;
+    font-size: 0.96rem;
+}
+
+.modal-boletos-generados {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    min-height: 56px;
+    margin-bottom: 18px;
+}
+
+.modal-boleto-item {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 58px;
+    padding: 10px 16px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: #ffffff;
+    font-weight: 800;
+    box-shadow: 0 10px 20px rgba(37, 99, 235, 0.16);
+}
+
+.body-modal-open {
+    overflow: hidden;
+}
+
+.barra-inferior {
+    position: fixed;
+    left: 50%;
+    bottom: 14px;
+    transform: translateX(-50%);
+    width: min(96%, 980px);
+    z-index: 999;
+    pointer-events: none;
+}
+
+.barra-inferior-contenido {
+    pointer-events: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 14px 16px;
+    border-radius: 24px;
+    background: rgba(10, 18, 35, 0.92);
+    color: #ffffff;
+    box-shadow: 0 24px 44px rgba(15, 23, 42, 0.26);
+    backdrop-filter: blur(12px);
+}
+
+.barra-info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+    align-items: center;
+}
+
+.barra-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.92);
+}
+
+.barra-chip strong {
+    color: #ffffff;
+}
+
+.barra-acciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.barra-inferior .btn-primary,
+.barra-inferior .btn-secondary {
+    padding: 13px 18px;
+    border-radius: 16px;
+}
+
+.barra-inferior .btn-secondary {
+    background: rgba(255,255,255,0.12);
+    color: #ffffff;
+    border-color: rgba(255,255,255,0.16);
+    box-shadow: none;
+}
+
+.barra-inferior .btn-secondary:hover {
+    background: rgba(255,255,255,0.18);
+}
+
+@media (max-width: 1080px) {
+    .hero-content {
+        grid-template-columns: 1fr;
+    }
+
+    .layout-principal {
+        grid-template-columns: 1fr;
+    }
+
+    .resumen-sticky {
+        position: static;
+        top: auto;
+    }
+}
+
+@media (max-width: 768px) {
+    .public-page {
+        padding-bottom: 155px;
+    }
+
+    .hero-publico {
+        padding: 28px 16px 24px;
+    }
+
+    .hero-copy {
+        text-align: left;
+    }
+
+    .logo-publico {
+        width: 76px;
+        margin-bottom: 14px;
+    }
+
+    .hero-content h1 {
+        font-size: 2.35rem;
+    }
+
+    .hero-content p {
+        font-size: 0.98rem;
+        margin-bottom: 20px;
+    }
+
+    .hero-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .contenedor-publico {
+        padding: 18px 14px 40px;
+        gap: 18px;
+    }
+
+    .card-publica {
+        padding: 18px;
+        border-radius: 24px;
+    }
+
+    .card-header {
+        margin-bottom: 16px;
+    }
+
+    .card-icon {
+        width: 46px;
+        height: 46px;
+        border-radius: 16px;
+    }
+
+    .titulo-seccion {
+        font-size: 1.28rem;
+    }
+
+    .grid-boletos {
+        grid-template-columns: repeat(auto-fill, minmax(66px, 1fr));
+        gap: 10px;
+    }
+
+    .boleto-item {
+        min-height: 56px;
+        padding: 14px 6px;
+        border-radius: 18px;
+        font-size: 0.95rem;
+    }
+
+    .modal-maquinita-contenido,
+    .modal-apartado-contenido {
+        width: min(94%, 94%);
+        padding: 18px;
+        margin-top: 3vh;
+        border-radius: 24px;
+    }
+
+    .barra-inferior-contenido {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .barra-acciones {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .barra-acciones button {
+        width: 100%;
+    }
+}
+
+@media (max-width: 520px) {
+    .hero-actions,
+    .acciones-publico,
+    .acciones-maquina-principal {
+        display: grid;
+        grid-template-columns: 1fr;
+    }
+
+    .barra-acciones {
+        grid-template-columns: 1fr;
+    }
+
+    .resumen-top {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .modal-header-cantidad {
+        flex-direction: column;
+        align-items: stretch;
+        padding-right: 0;
+    }
+}
+</style>
+</head>
+<body>
+<main class="public-page">
+    <section class="hero-publico">
+        <div class="hero-content">
+            <div class="hero-copy">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo Sorteos Sierra Norte Puebla" class="logo-publico">
+
+                <div class="hero-badge">
+                    <i class="fas fa-star"></i>
+                    Elige tus boletos favoritos de forma fácil y rápida
+                </div>
+
+                <h1>Sorteos Sierra Norte Puebla</h1>
+                <p>
+                    Selecciona tus números manualmente o deja que la maquinita de la suerte elija por ti.
+                    Revisa tu total al instante y aparta tus boletos en pocos pasos.
+                </p>
+
+                <div class="hero-actions">
+                    <button type="button" id="abrir_maquinita_hero" class="btn-primary btn-maquinita">
+                        <i class="fas fa-random"></i>
+                        Maquinita de la suerte
+                    </button>
+                    <button type="button" id="ir_boletos" class="btn-secondary">
+                        <i class="fas fa-ticket-alt"></i>
+                        Ver números disponibles
+                    </button>
+                    <a href="{{ url_for('apartado') }}" class="btn-link-publico">
+                        <i class="fas fa-search"></i>
+                        Consultar mi apartado
+                    </a>
+                </div>
+            </div>
+
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <span class="label">Sorteo</span>
+                    <span class="value">{{ sorteo.nombre }}</span>
+                </div>
+                <div class="hero-stat">
+                    <span class="label">Premio</span>
+                    <span class="value">${{ "%.2f"|format(sorteo.premio) }}</span>
+                </div>
+                <div class="hero-stat">
+                    <span class="label">Precio por boleto</span>
+                    <span class="value">${{ "%.2f"|format(sorteo.precio_numero) }}</span>
+                </div>
+                <div class="hero-stat">
+                    <span class="label">Fecha del sorteo</span>
+                    <span class="value">{{ sorteo.fecha_sorteo }}</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="contenedor-publico">
+        <div class="layout-principal">
+            <div class="columna-principal">
+                <div class="card-publica">
+                    <div class="card-header">
+                        <div class="card-header-left">
+                            <div class="card-icon">
+                                <i class="fas fa-info-circle"></i>
+                            </div>
+                            <div>
+                                <h2 class="titulo-seccion">Información del sorteo</h2>
+                                <p class="texto-seccion">Conoce los datos principales antes de elegir tus boletos.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="info-publica-grid">
+                        <div class="info-publica-box">
+                            <span class="info-publica-label">Sorteo</span>
+                            <strong class="info-publica-value">{{ sorteo.nombre }}</strong>
+                        </div>
+                        <div class="info-publica-box">
+                            <span class="info-publica-label">Premio</span>
+                            <strong class="info-publica-value">${{ "%.2f"|format(sorteo.premio) }}</strong>
+                        </div>
+                        <div class="info-publica-box">
+                            <span class="info-publica-label">Precio por boleto</span>
+                            <strong class="info-publica-value">${{ "%.2f"|format(sorteo.precio_numero) }}</strong>
+                        </div>
+                        <div class="info-publica-box">
+                            <span class="info-publica-label">Fecha del sorteo</span>
+                            <strong class="info-publica-value">{{ sorteo.fecha_sorteo }}</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-publica">
+                    <div class="card-header">
+                        <div class="card-header-left">
+                            <div class="card-icon">
+                                <i class="fas fa-align-left"></i>
+                            </div>
+                            <div>
+                                <h2 class="titulo-seccion">Descripción del sorteo</h2>
+                                <p class="texto-seccion">Reglas, dinámica y detalles importantes para participar.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="descripcion-sorteo-box">
+                        {% if sorteo.descripcion %}
+{{ sorteo.descripcion }}
+                        {% else %}
+<strong>Aquí irá la descripción del sorteo, reglas, dinámica de participación, formas de pago, fecha límite para apartar, condiciones para entregar el premio y cualquier información importante para los participantes.</strong>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="card-publica" id="seccion_boletos">
+                    <div class="card-header">
+                        <div class="card-header-left">
+                            <div class="card-icon">
+                                <i class="fas fa-hashtag"></i>
+                            </div>
+                            <div>
+                                <h2 class="titulo-seccion">Números disponibles</h2>
+                                <p class="texto-seccion">Toca o haz clic sobre los boletos disponibles para agregarlos a tu selección.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="leyenda-boletos">
+                        <div class="leyenda-item">
+                            <span class="leyenda-punto disponible"></span>
+                            Disponible
+                        </div>
+                        <div class="leyenda-item">
+                            <span class="leyenda-punto seleccionado"></span>
+                            Seleccionado
+                        </div>
+                        <div class="leyenda-item">
+                            <span class="leyenda-punto no-disponible"></span>
+                            No disponible
+                        </div>
+                    </div>
+
+                    <div class="grid-boletos" id="grid_boletos">
+                        {% for boleto in boletos %}
+                        <button
+                            type="button"
+                            class="boleto-item {{ boleto.status_css }}"
+                            data-numero="{{ boleto.numero }}"
+                            data-status="{{ boleto.status_boleto }}"
+                            {% if boleto.status_boleto != 'Disponible' %}disabled{% endif %}
+                            aria-label="Boleto {{ boleto.numero }}"
+                        >
+                            {{ boleto.numero }}
+                        </button>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <aside class="columna-lateral">
+                <div class="resumen-sticky">
+                    <div class="card-publica">
+                        <div class="resumen-top">
+                            <div>
+                                <h2 class="titulo-seccion">Tu selección</h2>
+                                <p class="texto-seccion">Aquí verás tus boletos elegidos y el total a pagar.</p>
+                            </div>
+                            <span class="estado-pill">
+                                <i class="fas fa-ticket-alt"></i>
+                                Apartado rápido
+                            </span>
+                        </div>
+
+                        <div class="panel-acciones">
+                            <div class="panel-accion-principal">
+                                <h3>¿No sabes cuáles elegir?</h3>
+                                <p>Usa la maquinita de la suerte para generar boletos al azar en segundos.</p>
+                                <div class="acciones-maquina-principal">
+                                    <button type="button" id="abrir_maquinita" class="btn-primary btn-maquinita">
+                                        <i class="fas fa-random"></i>
+                                        Maquinita de la suerte
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="margin-top: 20px;">
+                            <div id="seleccionados_lista" class="seleccionados-lista"></div>
+                        </div>
+
+                        <div class="resumen-seleccion">
+                            <div class="resumen-box">
+                                <span>Boletos elegidos</span>
+                                <strong id="cantidad_seleccionada">0 boleto(s) seleccionado(s)</strong>
+                            </div>
+                            <div class="resumen-box">
+                                <span>Total</span>
+                                <strong id="total_seleccionado">$0.00</strong>
+                            </div>
+                        </div>
+
+                        <div class="acciones-publico">
+                            <button type="button" id="btn_mostrar_formulario" class="btn-primary" disabled>
+                                <i class="fas fa-check-circle"></i>
+                                Apartar boletos
+                            </button>
+                            <button type="button" id="btn_limpiar_seleccion" class="btn-secondary">
+                                <i class="fas fa-trash-alt"></i>
+                                Limpiar selección
+                            </button>
+                            <a href="{{ url_for('apartado') }}" class="btn-link-publico">
+                                <i class="fas fa-search"></i>
+                                Consultar apartado
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </section>
+</main>
+
+<div class="modal-maquinita hidden" id="modal_maquinita">
+    <div class="modal-maquinita-overlay" id="cerrar_modal_overlay"></div>
+    <div class="modal-maquinita-contenido">
+        <button type="button" class="modal-cerrar" id="cerrar_modal_btn" aria-label="Cerrar">×</button>
+
+        <div class="card-header" style="margin-bottom: 14px;">
+            <div class="card-header-left">
+                <div class="card-icon">
+                    <i class="fas fa-random"></i>
+                </div>
+                <div>
+                    <h2 class="titulo-seccion">Maquinita de la suerte</h2>
+                    <p class="texto-seccion">Elige cuántos boletos quieres y genera números aleatorios disponibles.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-header-cantidad">
+            <label for="modal_cantidad_boletos">Boletos a generar:</label>
+            <select id="modal_cantidad_boletos" class="input-tabla">
+                <option value="1">1 Boleto</option>
+                <option value="2">2 Boletos</option>
+                <option value="3">3 Boletos</option>
+                <option value="4">4 Boletos</option>
+                <option value="5">5 Boletos</option>
+                <option value="10">10 Boletos</option>
+                <option value="20">20 Boletos</option>
+                <option value="30">30 Boletos</option>
+                <option value="40">40 Boletos</option>
+                <option value="50">50 Boletos</option>
+                <option value="100">100 Boletos</option>
+            </select>
+        </div>
+
+        <div class="modal-panel-boletos">
+            <p class="modal-ayuda">Presiona el botón para generar tus boletos al azar. Después podrás confirmarlos y agregarlos a tu selección.</p>
+            <div id="modal_boletos_generados" class="modal-boletos-generados"></div>
+            <div class="acciones-publico">
+                <button type="button" id="btn_generar_modal" class="btn-generar-modal">
+                    <i class="fas fa-bolt"></i>
+                    Generar boletos al azar
+                </button>
+                <button type="button" id="btn_confirmar_modal" class="btn-confirmar-modal hidden">
+                    <i class="fas fa-heart"></i>
+                    ¡Los quiero!
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-apartado hidden" id="modal_apartado">
+    <div class="modal-apartado-overlay" id="cerrar_apartado_overlay"></div>
+    <div class="modal-apartado-contenido">
+        <button type="button" class="modal-cerrar" id="cerrar_apartado_btn" aria-label="Cerrar">×</button>
+
+        <div class="card-header" style="margin-bottom: 14px;">
+            <div class="card-header-left">
+                <div class="card-icon">
+                    <i class="fas fa-user-check"></i>
+                </div>
+                <div>
+                    <h2 class="titulo-seccion">Datos de apartado</h2>
+                    <p class="texto-seccion">Completa tus datos para confirmar el apartado de tus boletos seleccionados.</p>
+                </div>
+            </div>
+        </div>
+
+        <form method="POST" action="{{ url_for('apartar_boleto', sorteo_id=sorteo.id) }}" id="form_apartar_publico">
+            <input type="hidden" name="numero" id="numero">
+            <input type="hidden" name="oportunidades" value="1">
+            <input type="hidden" name="fecha_envio_comprobante" value="">
+            <input type="hidden" name="foto_comprobante_link" value="">
+            <input type="hidden" name="fecha_apartado" value="">
+
+            <div class="form-grid-publico">
+                <div class="form-group">
+                    <label for="telefono">Teléfono</label>
+                    <input type="text" name="telefono" id="telefono" required class="input-tabla">
+                </div>
+                <div class="form-group">
+                    <label for="nombre">Nombre</label>
+                    <input type="text" name="nombre" id="nombre" required class="input-tabla">
+                </div>
+            </div>
+
+            <div class="form-grid-publico">
+                <div class="form-group">
+                    <label for="apellido">Apellido</label>
+                    <input type="text" name="apellido" id="apellido" required class="input-tabla">
+                </div>
+                <div class="form-group">
+                    <label for="estado">Estado</label>
+                    <select name="estado" id="estado" required class="input-tabla">
+                        <option value="">Selecciona un estado</option>
+                        <option value="Aguascalientes">Aguascalientes</option>
+                        <option value="Baja California">Baja California</option>
+                        <option value="Baja California Sur">Baja California Sur</option>
+                        <option value="Campeche">Campeche</option>
+                        <option value="Chiapas">Chiapas</option>
+                        <option value="Chihuahua">Chihuahua</option>
+                        <option value="Ciudad de México">Ciudad de México</option>
+                        <option value="Coahuila">Coahuila</option>
+                        <option value="Colima">Colima</option>
+                        <option value="Durango">Durango</option>
+                        <option value="Estado de México">Estado de México</option>
+                        <option value="Guanajuato">Guanajuato</option>
+                        <option value="Guerrero">Guerrero</option>
+                        <option value="Hidalgo">Hidalgo</option>
+                        <option value="Jalisco">Jalisco</option>
+                        <option value="Michoacán">Michoacán</option>
+                        <option value="Morelos">Morelos</option>
+                        <option value="Nayarit">Nayarit</option>
+                        <option value="Nuevo León">Nuevo León</option>
+                        <option value="Oaxaca">Oaxaca</option>
+                        <option value="Puebla">Puebla</option>
+                        <option value="Querétaro">Querétaro</option>
+                        <option value="Quintana Roo">Quintana Roo</option>
+                        <option value="San Luis Potosí">San Luis Potosí</option>
+                        <option value="Sinaloa">Sinaloa</option>
+                        <option value="Sonora">Sonora</option>
+                        <option value="Tabasco">Tabasco</option>
+                        <option value="Tamaulipas">Tamaulipas</option>
+                        <option value="Tlaxcala">Tlaxcala</option>
+                        <option value="Veracruz">Veracruz</option>
+                        <option value="Yucatán">Yucatán</option>
+                        <option value="Zacatecas">Zacatecas</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="boletos-confirmados-card">
+                <h3 class="subtitulo-publico">Boletos a apartar</h3>
+                <div id="boletos_confirmados" class="seleccionados-lista"></div>
+            </div>
+
+            <div class="acciones-publico">
+                <button type="submit" class="btn-primary">
+                    <i class="fas fa-check-circle"></i>
+                    Confirmar apartado
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="barra-inferior" id="barra_inferior">
+    <div class="barra-inferior-contenido">
+        <div class="barra-info">
+            <div class="barra-chip">
+                <i class="fas fa-ticket-alt"></i>
+                <span id="barra_cantidad">0 boletos</span>
+            </div>
+            <div class="barra-chip">
+                <i class="fas fa-wallet"></i>
+                <span>Total: <strong id="barra_total">$0.00</strong></span>
+            </div>
+        </div>
+        <div class="barra-acciones">
+            <button type="button" id="btn_barra_apartar" class="btn-primary" disabled>
+                <i class="fas fa-check-circle"></i>
+                Apartar
+            </button>
+            <button type="button" id="btn_barra_limpiar" class="btn-secondary">
+                <i class="fas fa-trash-alt"></i>
+                Limpiar
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const botonesBoletos = Array.from(document.querySelectorAll(".boleto-item"));
+    const abrirMaquinita = document.getElementById("abrir_maquinita");
+    const abrirMaquinitaHero = document.getElementById("abrir_maquinita_hero");
+    const irBoletos = document.getElementById("ir_boletos");
+    const modalMaquinita = document.getElementById("modal_maquinita");
+    const cerrarModalBtn = document.getElementById("cerrar_modal_btn");
+    const cerrarModalOverlay = document.getElementById("cerrar_modal_overlay");
+    const modalCantidadBoletos = document.getElementById("modal_cantidad_boletos");
+    const modalBoletosGenerados = document.getElementById("modal_boletos_generados");
+    const btnGenerarModal = document.getElementById("btn_generar_modal");
+    const btnConfirmarModal = document.getElementById("btn_confirmar_modal");
+
+    const modalApartado = document.getElementById("modal_apartado");
+    const cerrarApartadoBtn = document.getElementById("cerrar_apartado_btn");
+    const cerrarApartadoOverlay = document.getElementById("cerrar_apartado_overlay");
+
+    const seleccionadosLista = document.getElementById("seleccionados_lista");
+    const boletosConfirmados = document.getElementById("boletos_confirmados");
+    const cantidadSeleccionada = document.getElementById("cantidad_seleccionada");
+    const totalSeleccionado = document.getElementById("total_seleccionado");
+    const btnMostrarFormulario = document.getElementById("btn_mostrar_formulario");
+    const btnLimpiarSeleccion = document.getElementById("btn_limpiar_seleccion");
+    const numeroHidden = document.getElementById("numero");
+    const precioBoleto = Number("{{ sorteo.precio_numero }}");
+    const barraCantidad = document.getElementById("barra_cantidad");
+    const barraTotal = document.getElementById("barra_total");
+    const btnBarraApartar = document.getElementById("btn_barra_apartar");
+    const btnBarraLimpiar = document.getElementById("btn_barra_limpiar");
+    const seccionBoletos = document.getElementById("seccion_boletos");
+    const formApartarPublico = document.getElementById("form_apartar_publico");
+
+    let seleccionados = [];
+    let generadosModal = [];
+
+    const disponibles = botonesBoletos
+        .filter(boton => !boton.disabled)
+        .map(boton => boton.dataset.numero);
+
+    function limpiarSeleccionVisual() {
+        botonesBoletos.forEach(boton => boton.classList.remove("seleccionado"));
+    }
+
+    function marcarSeleccionVisual() {
+        limpiarSeleccionVisual();
+        botonesBoletos.forEach(boton => {
+            if (seleccionados.includes(boton.dataset.numero)) {
+                boton.classList.add("seleccionado");
+            }
+        });
+    }
+
+    function actualizarBarraInferior(total) {
+        barraCantidad.textContent = `${seleccionados.length} boleto${seleccionados.length === 1 ? "" : "s"}`;
+        barraTotal.textContent = `$${total.toFixed(2)}`;
+        btnBarraApartar.disabled = seleccionados.length === 0;
+    }
+
+    function renderSeleccionados() {
+        seleccionadosLista.innerHTML = "";
+        boletosConfirmados.innerHTML = "";
+
+        if (seleccionados.length === 0) {
+            seleccionadosLista.innerHTML = '<span class="texto-vacio">Aún no has seleccionado boletos</span>';
+            boletosConfirmados.innerHTML = '<span class="texto-vacio">No hay boletos seleccionados</span>';
+            cantidadSeleccionada.textContent = "0 boleto(s) seleccionado(s)";
+            totalSeleccionado.textContent = "$0.00";
+            btnMostrarFormulario.disabled = true;
+            numeroHidden.value = "";
+            actualizarBarraInferior(0);
+            return;
+        }
+
+        seleccionados
+            .slice()
+            .sort((a, b) => Number(a) - Number(b))
+            .forEach(numero => {
+                const tag = document.createElement("span");
+                tag.className = "boleto-tag";
+                tag.textContent = numero;
+                seleccionadosLista.appendChild(tag);
+
+                const tagConfirmado = document.createElement("span");
+                tagConfirmado.className = "boleto-tag";
+                tagConfirmado.textContent = numero;
+                boletosConfirmados.appendChild(tagConfirmado);
+            });
+
+        const total = seleccionados.length * precioBoleto;
+        cantidadSeleccionada.textContent = `${seleccionados.length} boleto(s) seleccionado(s)`;
+        totalSeleccionado.textContent = `$${total.toFixed(2)}`;
+        btnMostrarFormulario.disabled = false;
+        numeroHidden.value = seleccionados.join(",");
+        actualizarBarraInferior(total);
+    }
+
+    function obtenerAleatoriosDisponibles(cantidad) {
+        const disponiblesReales = disponibles.filter(numero => !seleccionados.includes(numero));
+        const copia = [...disponiblesReales];
+        for (let i = copia.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [copia[i], copia[j]] = [copia[j], copia[i]];
+        }
+        return copia.slice(0, cantidad);
+    }
+
+    function abrirModal() {
+        modalMaquinita.classList.remove("hidden");
+        document.body.classList.add("body-modal-open");
+    }
+
+    function cerrarModal() {
+        modalMaquinita.classList.add("hidden");
+        document.body.classList.remove("body-modal-open");
+    }
+
+    function abrirModalApartado() {
+        modalApartado.classList.remove("hidden");
+        document.body.classList.add("body-modal-open");
+    }
+
+    function cerrarModalApartado() {
+        modalApartado.classList.add("hidden");
+        document.body.classList.remove("body-modal-open");
+    }
+
+    function renderGeneradosModal() {
+        modalBoletosGenerados.innerHTML = "";
+
+        if (generadosModal.length === 0) {
+            btnConfirmarModal.classList.add("hidden");
+            return;
+        }
+
+        generadosModal.forEach(numero => {
+            const span = document.createElement("span");
+            span.className = "modal-boleto-item";
+            span.textContent = numero;
+            modalBoletosGenerados.appendChild(span);
+        });
+
+        btnConfirmarModal.classList.remove("hidden");
+    }
+
+    function limpiarSeleccionCompleta() {
+        seleccionados = [];
+        generadosModal = [];
+        limpiarSeleccionVisual();
+        renderSeleccionados();
+        cerrarModalApartado();
+    }
+
+    abrirMaquinita.addEventListener("click", abrirModal);
+    abrirMaquinitaHero.addEventListener("click", abrirModal);
+
+    irBoletos.addEventListener("click", function () {
+        seccionBoletos.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+
+    cerrarModalBtn.addEventListener("click", cerrarModal);
+    cerrarModalOverlay.addEventListener("click", cerrarModal);
+    cerrarApartadoBtn.addEventListener("click", cerrarModalApartado);
+    cerrarApartadoOverlay.addEventListener("click", cerrarModalApartado);
+
+    btnGenerarModal.addEventListener("click", function () {
+        const cantidad = parseInt(modalCantidadBoletos.value, 10);
+        const disponiblesReales = disponibles.filter(numero => !seleccionados.includes(numero));
+
+        if (isNaN(cantidad) || cantidad <= 0) {
+            alert("Ingresa una cantidad válida.");
+            return;
+        }
+
+        if (cantidad > disponiblesReales.length) {
+            alert("No hay suficientes boletos disponibles para generar esa cantidad.");
+            return;
+        }
+
+        generadosModal = obtenerAleatoriosDisponibles(cantidad);
+        renderGeneradosModal();
+    });
+
+    btnConfirmarModal.addEventListener("click", function () {
+        if (generadosModal.length === 0) {
+            return;
+        }
+
+        seleccionados = [...new Set([...seleccionados, ...generadosModal])];
+        marcarSeleccionVisual();
+        renderSeleccionados();
+        cerrarModal();
+    });
+
+    btnLimpiarSeleccion.addEventListener("click", limpiarSeleccionCompleta);
+    btnBarraLimpiar.addEventListener("click", limpiarSeleccionCompleta);
+
+    btnMostrarFormulario.addEventListener("click", function () {
+        if (seleccionados.length === 0) {
+            return;
+        }
+
+        abrirModalApartado();
+        setTimeout(() => {
+            document.getElementById("telefono").focus();
+        }, 120);
+    });
+
+    btnBarraApartar.addEventListener("click", function () {
+        if (seleccionados.length === 0) {
+            return;
+        }
+
+        abrirModalApartado();
+        setTimeout(() => {
+            document.getElementById("telefono").focus();
+        }, 120);
+    });
+
+    botonesBoletos.forEach(boton => {
+        boton.addEventListener("click", function () {
+            if (boton.disabled) {
+                return;
+            }
+
+            const numero = boton.dataset.numero;
+
+            if (seleccionados.includes(numero)) {
+                seleccionados = seleccionados.filter(n => n !== numero);
+            } else {
+                seleccionados.push(numero);
+            }
+
+            marcarSeleccionVisual();
+            renderSeleccionados();
+        });
+    });
+
+    formApartarPublico.addEventListener("submit", function (e) {
+        if (seleccionados.length === 0) {
+            e.preventDefault();
+            alert("Selecciona al menos un boleto.");
+            return;
+        }
+
+        numeroHidden.value = seleccionados.join(",");
+    });
+
+    document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape") {
+            if (!modalMaquinita.classList.contains("hidden")) {
+                cerrarModal();
+            }
+            if (!modalApartado.classList.contains("hidden")) {
+                cerrarModalApartado();
+            }
+        }
+    });
+
+    renderSeleccionados();
+});
+</script>
+</body>
+</html>

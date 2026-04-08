@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lista de Sorteos | Sorteos Sierra Norte Puebla</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+
+{% include 'partials/headercresort.html' %}
+{% include 'creasorteo/sidebarcresort.html' %}
+
+<main class="main-content">
+    <div class="container">
+
+        <header class="page-header">
+            <h2>Lista de Sorteos</h2>
+            <p class="subtitle">Administra los sorteos registrados</p>
+        </header>
+
+        <section class="table-card">
+            <div class="table-actions">
+                <a href="{{ url_for('admin.panel') }}" class="btn-secondary">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Volver al panel</span>
+                </a>
+
+                <a href="{{ url_for('admin.crear_sorteo') }}" class="btn-primary">
+                    <i class="fas fa-plus"></i>
+                    <span>Crear sorteo</span>
+                </a>
+            </div>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Premio</th>
+                            <th>Precio por número</th>
+                            <th>Total de números</th>
+                            <th>Fecha del sorteo</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for sorteo in sorteos %}
+                        <tr>
+                            <td><strong>{{ sorteo.id }}</strong></td>
+                            <td>{{ sorteo.nombre }}</td>
+                            <td>${{ "%.2f"|format(sorteo.premio) }}</td>
+                            <td>${{ "%.2f"|format(sorteo.precio_numero) }}</td>
+                            <td>{{ sorteo.total_numeros }}</td>
+                            <td>{{ sorteo.fecha_sorteo }}</td>
+                            <td>{{ sorteo.estado }}</td>
+                            <td>
+                                <a href="{{ url_for('admin.gestion_sorteo', sorteo_id=sorteo.id) }}" class="btn-primary btn-tabla">
+                                    Gestionar
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+
+                        {% if not sorteos %}
+                        <tr>
+                            <td colspan="8">
+                                <div class="empty-state">
+                                    <h3>No hay sorteos registrados</h3>
+                                    <p>Aún no has creado ningún sorteo.</p>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </div>
+</main>
+
+</body>
+</html>

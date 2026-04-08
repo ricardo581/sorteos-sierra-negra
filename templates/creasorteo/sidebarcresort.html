@@ -1,0 +1,35 @@
+<aside class="sidebar">
+
+  <div class="sidebar-header">
+    <h2>Sorteos</h2>
+  </div>
+
+  <ul class="sidebar-menu">
+
+    <li>
+      <a href="{{ url_for('admin.panel') }}"
+         class="{% if request.endpoint=='admin.panel' %}active{% endif %}">
+        <i class="fas fa-home"></i>
+        <span>Inicio</span>
+      </a>
+    </li>
+
+    <li>
+      <a href="{{ url_for('admin.crear_sorteo') }}"
+         class="{% if request.endpoint=='admin.crear_sorteo' %}active{% endif %}">
+        <i class="fas fa-plus-circle"></i>
+        <span>Crear sorteo</span>
+      </a>
+    </li>
+
+    <li>
+      <a href="{{ url_for('admin.administrar_sorteos') }}"
+         class="{% if request.endpoint=='admin.administrar_sorteos' %}active{% endif %}">
+        <i class="fas fa-list"></i>
+        <span>Administrar sorteos</span>
+      </a>
+    </li>
+
+  </ul>
+
+</aside>

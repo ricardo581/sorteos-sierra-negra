@@ -1,0 +1,33 @@
+<header class="top-header">
+
+  <div class="logo-header">
+    <a href="{{ url_for('admin.panel') }}">
+      <span class="logo-text">Sorteos Sierra Norte Puebla</span>
+    </a>
+  </div>
+
+  <div class="header-right">
+
+    <div class="user-menu">
+      <button class="user-menu-btn" id="user-menu-btn">
+        {{ admin_usuario[0]|upper if admin_usuario else 'A' }}
+      </button>
+
+      <nav class="user-menu-content" id="user-menu-content">
+        <div class="user-info">
+          <span>{{ admin_usuario }}</span>
+        </div>
+
+        <a href="{{ url_for('admin.panel') }}" class="user-menu-item">
+          Panel
+        </a>
+
+        <a href="{{ url_for('admin.logout') }}" class="user-menu-item">
+          Cerrar sesión
+        </a>
+      </nav>
+    </div>
+
+  </div>
+
+</header>
