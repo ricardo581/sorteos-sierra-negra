@@ -8,8 +8,11 @@ db = SQLAlchemy()
 
 admin_bp = Blueprint("admin", __name__, url_prefix="/admin")
 
-ADMIN_USER = os.environ.get("ADMIN_USER", "admin")
-ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD", "123456")
+ADMIN_USER = os.environ.get("ADMIN_USER")
+ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD")
+
+if not ADMIN_USER or not ADMIN_PASSWORD:
+    raise ValueError("Faltan ADMIN_USER o ADMIN_PASSWORD en las variables de entorno")
 
 
 class Sorteo(db.Model):
