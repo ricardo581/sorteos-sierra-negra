@@ -1,13 +1,21 @@
 import os
 from uuid import uuid4
+from datetime import datetime
 from werkzeug.utils import secure_filename
 from flask import Flask, redirect, url_for, render_template, request
-from blueprints.admin import admin_bp, SORTEOS
-from datetime import datetime
+from blueprints.admin import admin_bp, db, Sorteo, Boleto, obtener_status_css
 
 app = Flask(__name__)
-app.secret_key = "cambia_esta_clave_por_una_mas_segura"
 
+database_url = os.environ.get("DATABASE_URL")
+if database_url and database_url.startswith("postgres://"):
+    database_url = database_url.replace("postgres://", "postgresql://", 1)
+
+app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY", "cambia_esta_clave_por_una_mas_segura")
+app.config["SQLALCHEMY_DATABASE_URI"] = database_url
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
+db.init_app(app)
 app.register_blueprint(admin_bp)
 
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
@@ -16,51 +24,69 @@ EXTENSIONES_PERMITIDAS = {"png", "jpg", "jpeg", "pdf"}
 
 os.makedirs(CARPETA_COMPROBANTES, exist_ok=True)
 
+with app.app_context():
+    db.create_all()
+
 
 def archivo_permitido(nombre_archivo):
     return "." in nombre_archivo and nombre_archivo.rsplit(".", 1)[1].lower() in EXTENSIONES_PERMITIDAS
 
 
 def obtener_sorteo_por_id(sorteo_id):
-    for sorteo in SORTEOS:
-        if sorteo["id"] == sorteo_id:
-            return sorteo
-    return None
+    return db.session.get(Sorteo, sorteo_id)
 
 
-def obtener_boleto_por_numero(sorteo, numero):
-    for boleto in sorteo["boletos"]:
-        if str(boleto["numero"]).strip() == str(numero).strip():
-            return boleto
-    return None
+def obtener_boleto_por_numero(sorteo_id, numero):
+    return Boleto.query.filter_by(sorteo_id=sorteo_id, numero=str(numero).strip()).first()
 
 
 def obtener_boletos_por_telefono(telefono):
+    boletos = (
+        Boleto.query
+        .join(Sorteo, Boleto.sorteo_id == Sorteo.id)
+        .filter(Boleto.telefono == telefono.strip())
+        .order_by(Sorteo.id.desc(), Boleto.numero.asc())
+        .all()
+    )
+
     boletos_encontrados = []
 
-    for sorteo in SORTEOS:
-        for boleto in sorteo["boletos"]:
-            if boleto.get("telefono", "").strip() == telefono.strip():
-                boleto_copia = dict(boleto)
-                boleto_copia["nombre_sorteo"] = sorteo.get("nombre", "")
-                boleto_copia["sorteo_id"] = sorteo.get("id")
-                boleto_copia["precio_numero"] = float(sorteo.get("precio_numero", 0))
-                boletos_encontrados.append(boleto_copia)
+    for boleto in boletos:
+        boletos_encontrados.append({
+            "id": boleto.id,
+            "numero": boleto.numero,
+            "oportunidades": boleto.oportunidades,
+            "nombre": boleto.nombre,
+            "apellido": boleto.apellido,
+            "telefono": boleto.telefono,
+            "estado_mexico": boleto.estado_mexico,
+            "fecha_envio_comprobante": boleto.fecha_envio_comprobante,
+            "fecha_apartado": boleto.fecha_apartado,
+            "foto_comprobante_link": boleto.foto_comprobante_link,
+            "observaciones": boleto.observaciones,
+            "status_boleto": boleto.status_boleto,
+            "status_css": boleto.status_css,
+            "nombre_sorteo": boleto.sorteo.nombre,
+            "sorteo_id": boleto.sorteo.id,
+            "precio_numero": float(boleto.sorteo.precio_numero)
+        })
 
     return boletos_encontrados
 
 
 @app.route("/")
 def inicio():
-    if not SORTEOS:
+    sorteo = Sorteo.query.order_by(Sorteo.id.desc()).first()
+
+    if not sorteo:
         return redirect(url_for("admin.login"))
 
-    sorteo = SORTEOS[-1]
+    boletos = Boleto.query.filter_by(sorteo_id=sorteo.id).order_by(Boleto.numero.asc()).all()
 
     return render_template(
         "sorteoprin/sorteosierranegra.html",
         sorteo=sorteo,
-        boletos=sorteo["boletos"]
+        boletos=boletos
     )
 
 
@@ -71,10 +97,12 @@ def ver_sorteo_publico(sorteo_id):
     if not sorteo:
         return "Sorteo no encontrado", 404
 
+    boletos = Boleto.query.filter_by(sorteo_id=sorteo.id).order_by(Boleto.numero.asc()).all()
+
     return render_template(
         "sorteoprin/sorteosierranegra.html",
         sorteo=sorteo,
-        boletos=sorteo["boletos"]
+        boletos=boletos
     )
 
 
@@ -116,10 +144,10 @@ def apartar_boleto(sorteo_id):
     boletos_validos = []
 
     for numero in lista_numeros:
-        boleto = obtener_boleto_por_numero(sorteo, numero)
+        boleto = obtener_boleto_por_numero(sorteo_id, numero)
         if not boleto:
             continue
-        if boleto["status_boleto"] != "Disponible":
+        if boleto.status_boleto != "Disponible":
             continue
         boletos_validos.append(boleto)
 
@@ -127,16 +155,18 @@ def apartar_boleto(sorteo_id):
         return redirect(url_for("ver_sorteo_publico", sorteo_id=sorteo_id))
 
     for boleto in boletos_validos:
-        boleto["oportunidades"] = oportunidades_valor
-        boleto["nombre"] = nombre
-        boleto["apellido"] = apellido
-        boleto["telefono"] = telefono
-        boleto["estado_mexico"] = estado_mexico
-        boleto["fecha_envio_comprobante"] = fecha_envio_comprobante
-        boleto["foto_comprobante_link"] = foto_comprobante_link
-        boleto["fecha_apartado"] = fecha_apartado
-        boleto["status_boleto"] = "En revisión"
-        boleto["status_css"] = "en-revision"
+        boleto.oportunidades = oportunidades_valor
+        boleto.nombre = nombre
+        boleto.apellido = apellido
+        boleto.telefono = telefono
+        boleto.estado_mexico = estado_mexico
+        boleto.fecha_envio_comprobante = fecha_envio_comprobante
+        boleto.foto_comprobante_link = foto_comprobante_link
+        boleto.fecha_apartado = fecha_apartado
+        boleto.status_boleto = "En revisión"
+        boleto.status_css = "en-revision"
+
+    db.session.commit()
 
     return redirect(url_for("apartado"))
 
@@ -179,6 +209,7 @@ def consultar_apartado():
         mensaje_exito="",
         mensaje_error=""
     )
+
 
 @app.route("/subir-comprobante", methods=["POST"])
 def subir_comprobante():
@@ -235,16 +266,23 @@ def subir_comprobante():
     ruta_publica = f"comprobantes/{nombre_final}"
     fecha_envio = datetime.now().strftime("%Y-%m-%dT%H:%M")
 
+    boletos_actualizar = (
+        Boleto.query
+        .filter(Boleto.telefono == telefono, Boleto.status_boleto != "Confirmado")
+        .all()
+    )
+
     boletos_actualizados_count = 0
 
-    for sorteo in SORTEOS:
-        for boleto in sorteo["boletos"]:
-            if boleto.get("telefono", "").strip() == telefono and boleto.get("status_boleto") != "Confirmado":
-                boleto["foto_comprobante_link"] = ruta_publica
-                boleto["fecha_envio_comprobante"] = fecha_envio
-                boleto["status_boleto"] = "En revisión"
-                boleto["status_css"] = "en-revision"
-                boletos_actualizados_count += 1
+    for boleto in boletos_actualizar:
+        boleto.foto_comprobante_link = ruta_publica
+        boleto.fecha_envio_comprobante = fecha_envio
+        boleto.status_boleto = "En revisión"
+        boleto.status_css = "en-revision"
+        boletos_actualizados_count += 1
+
+    if boletos_actualizados_count > 0:
+        db.session.commit()
 
     boletos_actualizados = obtener_boletos_por_telefono(telefono)
     total_boletos = len(boletos_actualizados)
@@ -274,5 +312,7 @@ def subir_comprobante():
         mensaje_error=""
     )
 
+
 if __name__ == "__main__":
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 8000))
+    app.run(host="0.0.0.0", port=port)
